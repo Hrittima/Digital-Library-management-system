@@ -1,0 +1,13 @@
+.git
+.env
+.env.*
+!.env.example
+.gitignore
+.dockerignore
+Executables/
+Old_UI/
+Db/kokodevelopers.sql
+sudo/assets/magazines/
+sudo/assets/img/books/
+README.md
+Screenshots/

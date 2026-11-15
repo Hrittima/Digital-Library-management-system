@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+*.log
+Executables/
+Old_UI/
+Db/kokodevelopers.sql
+sudo/assets/magazines/
+sudo/assets/img/books/
