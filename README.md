@@ -4,16 +4,20 @@ A PHP and MySQL library management system with a book catalog, member and staff 
 
 ## Local development
 
-1. Install PHP 8.2 or newer with `mysqli`, and MySQL/MariaDB.
-2. Create an empty database named `martdevelopers_iLibrary`.
-3. Import the schema and account-request table:
+1. Install PHP 8.2 or newer with `pdo_pgsql`, and PostgreSQL 14+.
+2. Create an empty database named `digital_library`:
 
    ```sh
-   mysql -u root -p martdevelopers_iLibrary < Db/schema.sql
-   mysql -u root -p martdevelopers_iLibrary < Db/account_requests.sql
+   psql -U postgres -c "CREATE DATABASE digital_library;"
    ```
 
-4. Configure `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` in your environment. The defaults support a local XAMPP development database. See `.env.example`.
+3. Import the schema:
+
+   ```sh
+   psql -U postgres -d digital_library -f Db/schema.pg.sql
+   ```
+
+4. Configure `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` in your environment. The defaults support a local PostgreSQL installation on port **5432**. See `.env.example`.
 5. From the project root, run `php -S 127.0.0.1:8000` and open <http://127.0.0.1:8000/>.
 
 The schema intentionally contains no demo accounts or personal data. Before using the system, import your own catalog and securely provision the first administrator. With the database environment configured, set `ADMIN_NAME`, `ADMIN_EMAIL`, and a strong `ADMIN_PASSWORD` (at least 12 characters), then run `php scripts/create-admin.php` from a trusted CLI. `ADMIN_PHONE` is optional. The script refuses web requests.
@@ -24,7 +28,7 @@ This project uses PHP and MySQL. Vercel's **Container Runtime** (currently in Be
 
 1. Push this repository to GitHub and import it as a new Vercel project. If Vercel does not select it automatically, choose the **Container** framework preset.
 2. Provision an externally hosted MySQL-compatible database. Vercel containers do not run the project's local XAMPP/MariaDB server.
-3. Import `Db/schema.sql` and `Db/account_requests.sql` into that database. Add the database connection details to Vercel's project environment variables: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD`. Never commit production credentials.
+3. Import `Db/schema.pg.sql` into that database. Add the database connection details to Vercel's project environment variables: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD`. Never commit production credentials.
 4. Deploy, then run `php scripts/create-admin.php` from a trusted machine with the Vercel database connection variables and `ADMIN_NAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` set. Add your catalog data.
 
 **Production notes:** PHP's default file-backed sessions and local file uploads are not durable across Vercel container instances. For dependable sign-in, use a shared session store; store uploaded book covers in durable object storage. The existing app must be adapted to those services before treating it as production-ready. A conventional PHP host or VPS with persistent storage is the simpler option if you want to keep the current session and upload behavior.

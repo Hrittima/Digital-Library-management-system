@@ -7,5 +7,7 @@ Thumbs.db
 Executables/
 Old_UI/
 Db/kokodevelopers.sql
+Db/*.dump
+Db/*.backup
 sudo/assets/magazines/
 sudo/assets/img/books/
